@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  wallet-app:
+    container_name: wallet-app
+    depends_on: [ postgres ]
+    build:
+      context: .
+      dockerfile: .docker/wallet-app.Dockerfile
+    ports:
+      - "8080:8080"
+    profiles:
+      - infra
+    networks:
+      - net
+  postgres:
+    container_name: postgres
+    image: postgres:15.3
+    environment:
+      POSTGRES_DB: "wallet-db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    profiles:
+      - infra
+    networks:
+      - net
+
+networks:
+  net:
